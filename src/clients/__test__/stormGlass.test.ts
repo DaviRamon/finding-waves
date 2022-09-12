@@ -1,6 +1,7 @@
 import { StormGlass } from "@src/clients/stormGlass";
 import axios from 'axios';
-import stormGlassWeather3HoursFixture from '@test/fixtures/stormglass_weather_3_hours.json'; // importa o JSON com a resposta da requisição para testes
+import stormGlassWeather3HoursFixture from '@test/fixtures/stormGlass_weather_3_hours.json'; // importa o JSON com a resposta da requisição para testes
+import stormGlassNormalized3HoursFixture from '@test/fixtures/stormGlass_normalized_3_hours.json';
 
 jest.mock('axios');
 
@@ -13,6 +14,6 @@ describe('StormGlass client', () => {
 
           const stormGlass = new StormGlass(axios);
           const response = await stormGlass.fetchPoints(lat, lng);
-          expect(response).toEqual({});
+          expect(response).toEqual(stormGlassNormalized3HoursFixture);
      });
 });
