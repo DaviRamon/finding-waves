@@ -1,0 +1,35 @@
+{
+  "name": "finding-waves",
+  "version": "1.0.0",
+  "description": "api typescript para encontrar ondas em Itapoa-sc",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc -p .",
+    "start": "tsc -p . && node dist/src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DaviRamon/finding-waves.git"
+  },
+  "keywords": [
+    "nodejs",
+    "typescript",
+    "itapoa"
+  ],
+  "author": "Davi Ramon Gonçalves",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DaviRamon/finding-waves/issues"
+  },
+  "homepage": "https://github.com/DaviRamon/finding-waves#readme",
+  "devDependencies": {
+    "@tsconfig/node14": "^1.0.3",
+    "@types/module-alias": "^2.0.1",
+    "@types/node": "^18.7.16",
+    "typescript": "^4.8.3"
+  },
+  "dependencies": {
+    "module-alias": "^2.2.2"
+  }
+}
