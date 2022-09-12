@@ -9,6 +9,7 @@ module.exports = {
   testEnvironment: 'node',
   clearMocks: true,
   preset: 'ts-jest',
+  // aliases
   moduleNameMapper: {
     '@src/(.*)': '<rootDir>/src/$1',
     '@test/(.*)': '<rootDir>/test/$1',
