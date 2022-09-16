@@ -1,7 +1,7 @@
 import { InternalError } from '@src/util/errors/internal-error';
 import { AxiosError } from 'axios';
 import config, { IConfig } from 'config'
-import * as HTTPUtil from '@src/util/ request';
+import * as HTTPUtil from '@src/util/request';
 
 
 /** Interfaces que simulam os dados com os seus tipos da resposta da API externa */
