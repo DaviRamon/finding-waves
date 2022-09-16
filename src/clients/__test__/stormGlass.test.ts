@@ -7,6 +7,7 @@ jest.mock('@src/util/request');
 
 describe('StormGlass client', () => {
 
+  const MockedRequestClass = HTTPUtil.Request as jest.Mocked<typeof HTTPUtil.Request>;
   const mockedRequest = new HTTPUtil.Request() as jest.Mocked<HTTPUtil.Request>;
 
   it('should return the normalized forecast from the StormGlass service', async () => {
@@ -66,6 +67,9 @@ describe('StormGlass client', () => {
         super();
       }
     }
+
+    /** não é usado */
+    MockedRequestClass.isRequestError.mockReturnValue(true); /**  Essa chamada retorna <true>, validando um erro de request */
 
     /** esse 'o formato do erro retornado pela <API> caso altere, TROCAR */
     mockedRequest.get.mockRejectedValue(
