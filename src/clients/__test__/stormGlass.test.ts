@@ -21,7 +21,7 @@ describe('StormGlass client', () => {
     expect(response).toEqual(stormGlassNormalizedResponseFixture);
   });
 
-  /** exclui os objetos imcompletos da resposta   */
+  /** exclui os objetos incompletos da resposta   */
   it('should exclude incomplete data points', async () => {
     const lat = -26.1174;
     const lng = -48.6168;
