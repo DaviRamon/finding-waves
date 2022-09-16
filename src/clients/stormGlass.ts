@@ -1,6 +1,7 @@
 import { InternalError } from '@src/util/errors/internal-error';
 import { AxiosError } from 'axios';
 import axios, { AxiosStatic, } from 'axios';
+import config, { IConfig } from 'config'
 
 /** Interfaces que simulam os dados com os seus tipos da resposta da API externa */
 export interface StormGlassPointSource {
@@ -50,6 +51,8 @@ export class StormGlassResponseError extends InternalError {
   }
 }
 
+const stormGlassResourceConfig: IConfig = config.get('App.resources.StormGlass'); // é possivel passar o tipo para o get (ex: get<T>)
+
 export class StormGlass {
   readonly stormGlassAPIParams =
     'swellDirection,swellHeight,swellPeriod,waveDirection,waveHeight,windDirection,windSpeed';
@@ -58,14 +61,16 @@ export class StormGlass {
   constructor(protected request: AxiosStatic = axios) { }
 
   public async fetchPoints(lat: number, lng: number): Promise<ForecastPoint[]> {
+    console.log(stormGlassResourceConfig);
+    
 
     try {
-      let url = `https://api.stormglass.io/v2/weather/point?params=${this.stormGlassAPIParams}&source=${this.stormGlassAPISource}&lat=${lat}&lng=${lng}`;
+      let url = `${stormGlassResourceConfig.get('apiUrl')}/weather/point?params=${this.stormGlassAPIParams}&source=${this.stormGlassAPISource}&lat=${lat}&lng=${lng}`;
       const response = await this.request.get<StormGlassForecastResponse>(/** tipo esperado do retorno do GET é StormGlassForecastReponse */
         url,
         {
           headers: {
-            Authorization: 'fake-token',
+            Authorization: stormGlassResourceConfig.get('apiToken'),
           },
         }
       );
