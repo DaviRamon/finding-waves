@@ -1,7 +1,8 @@
 import { InternalError } from '@src/util/errors/internal-error';
 import { AxiosError } from 'axios';
-import axios, { AxiosStatic, } from 'axios';
 import config, { IConfig } from 'config'
+import * as HTTPUtil from '@src/util/ request';
+
 
 /** Interfaces que simulam os dados com os seus tipos da resposta da API externa */
 export interface StormGlassPointSource {
@@ -46,27 +47,30 @@ export class CLientRequestError extends InternalError {
 /** Caso caso seja atingido o limite de 20 reqs diárias da API, ela retorna um status 429 e esse erro será retornado.*/
 export class StormGlassResponseError extends InternalError {
   constructor(message: string) {
-    const internalMessage = 'Unexpected error returned by the StormGlass service';
+    const internalMessage =
+      'Unexpected error returned by the StormGlass service';
     super(`${internalMessage}: ${message}`);
   }
 }
 
-const stormGlassResourceConfig: IConfig = config.get('App.resources.StormGlass'); // é possivel passar o tipo para o get (ex: get<T>)
+const stormGlassResourceConfig: IConfig = config.get(
+  'App.resources.StormGlass'
+); // é possivel passar o tipo para o get (ex: get<T>)
 
 export class StormGlass {
   readonly stormGlassAPIParams =
     'swellDirection,swellHeight,swellPeriod,waveDirection,waveHeight,windDirection,windSpeed';
   readonly stormGlassAPISource = 'noaa';
 
-  constructor(protected request: AxiosStatic = axios) { }
+  constructor(protected request = new HTTPUtil.Request()) { } /**  subistitui o axios por uma Generics  */
 
   public async fetchPoints(lat: number, lng: number): Promise<ForecastPoint[]> {
-    console.log(stormGlassResourceConfig);
-    
 
     try {
       let url = `${stormGlassResourceConfig.get('apiUrl')}/weather/point?params=${this.stormGlassAPIParams}&source=${this.stormGlassAPISource}&lat=${lat}&lng=${lng}`;
-      const response = await this.request.get<StormGlassForecastResponse>(/** tipo esperado do retorno do GET é StormGlassForecastReponse */
+
+      /** O response do axios foi do o axios por uma Generics, protegendo assim as informações do AXIOS */
+      const response = await this.request.get<StormGlassForecastResponse>(  /** tipo esperado do retorno do GET é StormGlassForecastReponse */
         url,
         {
           headers: {
@@ -76,12 +80,10 @@ export class StormGlass {
       );
 
       return this.normalizeResponse(response.data);
-
     } catch (err: unknown) {
       if ((err as AxiosError).response && (err as AxiosError).response?.data) {
         throw new StormGlassResponseError(
-          `Error: ${JSON.stringify((err as AxiosError).response?.data)} Code: ${
-            (err as AxiosError).response?.status
+          `Error: ${JSON.stringify((err as AxiosError).response?.data)} Code: ${(err as AxiosError).response?.status
           }`
         );
       }
