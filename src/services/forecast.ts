@@ -1,4 +1,5 @@
 import { ForecastPoint, StormGlass } from '@src/clients/stormGlass';
+import { InternalError } from '@src/util/errors/internal-error';
 
 /** se houver a necessidade de alterar algum valor, alteramos somente aqui */
 export enum BeachPosition /** pontos cardeais em inglês*/ {
@@ -21,14 +22,18 @@ export interface TimeForecast {
     forecast: BeachForecast[];
 }
 
-
 /** interface criada apenas com o objetivo de criar um TIPO para o retorno da classe Forecast */
 export interface BeachForecast extends Omit<Beach, 'user'>, ForecastPoint {
     /** o OMIT, esconde (omite) o campo (user) da classe que foi extendida (Beach)  */
 }
 
-/** interface para retornar o formato correto do objeto com as informações das praias */
+export class ForecastProcessingInternalError extends InternalError {
+    constructor(message: string) {
+      super(`Unexpected error during the forecast processing: ${message}`);
+    }
+  }
 
+/** interface para retornar o formato correto do objeto com as informações das praias */
 export class Forecast {
     constructor(
         protected stormGlass = new StormGlass()
@@ -38,38 +43,48 @@ export class Forecast {
         beaches: Beach[]
     ): Promise<TimeForecast[]> {
         const pointsWithCorrectSource: BeachForecast[] = [];
-        for (const beach of beaches) {
-            const points = await this.stormGlass.fetchPoints(
-                beach.lat,
-                beach.lng
-            );
-            const enrichedBeachData = points.map((responsePoints) => ({
-                ...{
-                    /** esses dados são adicionados aos dados que vem da PRAIA escolhida pelas cooderdanadas. */
-                    lat: beach.lat,
-                    lng: beach.lng,
-                    name: beach.name,
-                    position: beach.position,
-                    rating: 1,
-                },
-                ...responsePoints,
-            }));
-            pointsWithCorrectSource.push(...enrichedBeachData);
+
+        try {
+            for (const beach of beaches) {
+                const points = await this.stormGlass.fetchPoints(
+                    beach.lat,
+                    beach.lng
+                );
+                const enrichedBeachData = await this.enrichedBeachData(points, beach)
+                pointsWithCorrectSource.push(...enrichedBeachData);
+            }
+            return this.mapForecastByTime(pointsWithCorrectSource);
+            
+        } catch (error) {
+            throw new ForecastProcessingInternalError((error as Error).message);
         }
-        return this.mapForecastByTime(pointsWithCorrectSource);
     }
+
+    private enrichedBeachData(points: ForecastPoint[], beach: Beach): BeachForecast[] {
+        return points.map((e) => ({
+            ...{
+                /** esses dados são adicionados aos dados que vem da PRAIA escolhida pelas cooderdanadas. */
+                lat: beach.lat,
+                lng: beach.lng,
+                name: beach.name,
+                position: beach.position,
+                rating: 1,
+            },
+            ...e,
+        }));
+    };
 
     private mapForecastByTime(forecast: BeachForecast[]): TimeForecast[] {
         const forecastByeTime: TimeForecast[] = [];
-        for(let point of forecast) {
-            const timePoint = forecastByeTime.find((f => f.time == point.time));
-            if(timePoint) {
+        for (let point of forecast) {
+            const timePoint = forecastByeTime.find((f) => f.time == point.time);
+            if (timePoint) {
                 timePoint.forecast.push(point);
             } else {
                 forecastByeTime.push({
                     time: point.time,
                     forecast: [point],
-                })
+                });
             }
         }
         return forecastByeTime;

@@ -5,11 +5,12 @@ import { Beach, BeachPosition, Forecast } from '../forecast';
 jest.mock('@src/clients/stormGlass');
 
 describe('Forecast Service', () => {
+    const mockedStormGlassService = new StormGlass() as jest.Mocked<StormGlass>;
     it('should return the forecast for a list of beaches', async () => {
-        /** substitui o metodo por JEST para iniciar os testes aqui */
-        StormGlass.prototype.fetchPoints = jest
-            .fn()
-            .mockResolvedValue(stormGlassNormalizedResponseFixture);
+        /** mock com JEST e corretamente tipado  */
+        mockedStormGlassService.fetchPoints.mockResolvedValue(
+            stormGlassNormalizedResponseFixture
+        );
 
         const beaches: Beach[] = [
             {
@@ -84,10 +85,33 @@ describe('Forecast Service', () => {
                 ],
             },
         ];
-        const forecast = new Forecast(new StormGlass());
+        const forecast = new Forecast(mockedStormGlassService);
         const beachesWithRating = await forecast.processForecastForBeaches(
             beaches
         );
         expect(beachesWithRating).toEqual(expectedResponse);
     });
+
+    it('should return an empty list when the beaches array are empty', async () => {
+        const forecast = new Forecast();
+        const response = await forecast.processForecastForBeaches([]);
+        expect(response).toEqual([]);
+    });
+
+    it('should throw internal error when something goes wrong during the rating process', async () => {
+        const beaches: Beach[] = [
+            {
+                lat: -26.1174,
+                lng: -48.6168,
+                name: 'Itapoa',
+                position: BeachPosition.E,
+                user: 'some-id',
+            },
+        ];
+
+        mockedStormGlassService.fetchPoints.mockRejectedValue('Error fetching data');  /** espera-se que a req seja rejeitada com um erro */
+        const forecast = new Forecast(mockedStormGlassService);
+        await expect(forecast.processForecastForBeaches(beaches)).rejects.toThrow(Error)
+
+    })
 });
