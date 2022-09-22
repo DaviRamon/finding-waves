@@ -9,7 +9,7 @@ describe('Beach forecast functional tests', () => {
                     {
                         lat: -26.067029,
                         lng: 48.608372,
-                        name: 'Manly',
+                        name: 'Itapoa',
                         position: 'E',
                         rating: 2,
                         swellDirection: 64.26,
@@ -28,7 +28,7 @@ describe('Beach forecast functional tests', () => {
                     {
                         lat: -26.067029,
                         lng: 48.608372,
-                        name: 'Manly',
+                        name: 'Itapoa',
                         position: 'E',
                         rating: 2,
                         swellDirection: 123.41,

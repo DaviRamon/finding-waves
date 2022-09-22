@@ -4,14 +4,14 @@ describe('Beaches functional tests', () => {
          const newBeach = {
             lat: -26.067029,
             lng: 48.608372,
-            name: 'Manly',
+            name: 'Itapoa',
             position: 'E',
           };
     
-          const response = await global.testRequest.post('/beaches').send(newBeach);
+          const response = await global.testRequest.post('/beaches').send(newBeach); /** cria uma nova praia */
           expect(response.status).toBe(201);
-          //Object containing matches the keys and values, even if includes other keys such as id.
-          expect(response.body).toEqual(expect.objectContaining(newBeach));
+          expect(response.body).toEqual(expect.objectContaining(newBeach)); /** verifica se contem os items newBeach no objeto, nao precisa ser exatamente igual. */
+          //expect(response.body).toEqual(newBeach); 
 
       });
    });
