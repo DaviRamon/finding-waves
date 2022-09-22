@@ -10,8 +10,8 @@ export class ForecastController {
                 time: '2020-04-26T00:00:00+00:00',
                 forecast: [
                     {
-                        lat: -33.792726,
-                        lng: 151.289824,
+                        lat: -26.067029,
+                        lng: 48.608372,
                         name: 'Manly',
                         position: 'E',
                         rating: 2,
@@ -29,8 +29,8 @@ export class ForecastController {
                 time: '2020-04-26T01:00:00+00:00',
                 forecast: [
                     {
-                        lat: -33.792726,
-                        lng: 151.289824,
+                        lat: -26.067029,
+                        lng: 48.608372,
                         name: 'Manly',
                         position: 'E',
                         rating: 2,

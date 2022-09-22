@@ -13,8 +13,8 @@ describe('StormGlass client', () => {
         new HTTPUtil.Request() as jest.Mocked<HTTPUtil.Request>;
 
     it('should return the normalized forecast from the StormGlass service', async () => {
-        const lat = -26.1174;
-        const lng = -48.6168;
+        const lat = -26.067029;
+        const lng = -48.608372;
 
         mockedRequest.get.mockResolvedValue({
             data: stormGlassWeatherPointFixture,
@@ -27,8 +27,8 @@ describe('StormGlass client', () => {
 
     /** exclui os objetos incompletos da resposta   */
     it('should exclude incomplete data points', async () => {
-        const lat = -26.1174;
-        const lng = -48.6168;
+        const lat = -26.067029;
+        const lng = -48.608372;
         const incompleteResponse = {
             hours: [
                 {
@@ -51,8 +51,8 @@ describe('StormGlass client', () => {
 
     /**  retorna um erro generico caso a request tenha algum erro antes de chegar no serviço externo (ex: queda de conexão, etc)*/
     it('should get a generic error from StormGlass service when the request fail before reaching the service', async () => {
-        const lat = -26.1174;
-        const lng = -48.6168;
+        const lat = -26.067029;
+        const lng = -48.608372;
 
         mockedRequest.get.mockRejectedValue({ message: 'Network Error' });
 
@@ -65,8 +65,8 @@ describe('StormGlass client', () => {
 
     /** a API tem um limite de 200 requisições diárias, caso seja atingido esse limite, esse erro será retornado. */
     it('should get an StormGlassResponseError when the StormGlass service responds with error', async () => {
-        const lat = -26.1174;
-        const lng = -48.6168;
+        const lat = -26.067029;
+        const lng = -48.608372;
 
         class FakeAxiosError extends Error {
             constructor(public response: object) {

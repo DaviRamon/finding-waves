@@ -14,8 +14,8 @@ describe('Forecast Service', () => {
 
         const beaches: Beach[] = [
             {
-                lat: -26.1174,
-                lng: -48.6168,
+                lat: -26.067029,
+                lng: -48.608372,
                 name: 'Itapoa',
                 position: BeachPosition.E,
                 user: 'some-id',
@@ -26,8 +26,8 @@ describe('Forecast Service', () => {
                 time: '2020-04-26T00:00:00+00:00',
                 forecast: [
                     {
-                        lat: -26.1174,
-                        lng: -48.6168,
+                        lat: -26.067029,
+                        lng: -48.608372,
                         name: 'Itapoa',
                         position: 'E',
                         rating: 1,
@@ -47,8 +47,8 @@ describe('Forecast Service', () => {
                 time: '2020-04-26T01:00:00+00:00',
                 forecast: [
                     {
-                        lat: -26.1174,
-                        lng: -48.6168,
+                        lat: -26.067029,
+                        lng: -48.608372,
                         name: 'Itapoa',
                         position: 'E',
                         rating: 1,
@@ -68,8 +68,8 @@ describe('Forecast Service', () => {
                 time: '2020-04-26T02:00:00+00:00',
                 forecast: [
                     {
-                        lat: -26.1174,
-                        lng: -48.6168,
+                        lat: -26.067029,
+                        lng: -48.608372,
                         name: 'Itapoa',
                         position: 'E',
                         rating: 1,
@@ -101,8 +101,8 @@ describe('Forecast Service', () => {
     it('should throw internal error when something goes wrong during the rating process', async () => {
         const beaches: Beach[] = [
             {
-                lat: -26.1174,
-                lng: -48.6168,
+                lat: -26.067029,
+                lng: -48.608372,
                 name: 'Itapoa',
                 position: BeachPosition.E,
                 user: 'some-id',
