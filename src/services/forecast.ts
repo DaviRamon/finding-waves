@@ -29,9 +29,9 @@ export interface BeachForecast extends Omit<Beach, 'user'>, ForecastPoint {
 
 export class ForecastProcessingInternalError extends InternalError {
     constructor(message: string) {
-      super(`Unexpected error during the forecast processing: ${message}`);
+        super(`Unexpected error during the forecast processing: ${message}`);
     }
-  }
+}
 
 /** interface para retornar o formato correto do objeto com as informações das praias */
 export class Forecast {
@@ -50,17 +50,22 @@ export class Forecast {
                     beach.lat,
                     beach.lng
                 );
-                const enrichedBeachData = await this.enrichedBeachData(points, beach)
+                const enrichedBeachData = await this.enrichedBeachData(
+                    points,
+                    beach
+                );
                 pointsWithCorrectSource.push(...enrichedBeachData);
             }
             return this.mapForecastByTime(pointsWithCorrectSource);
-            
         } catch (error) {
             throw new ForecastProcessingInternalError((error as Error).message);
         }
     }
 
-    private enrichedBeachData(points: ForecastPoint[], beach: Beach): BeachForecast[] {
+    private enrichedBeachData(
+        points: ForecastPoint[],
+        beach: Beach
+    ): BeachForecast[] {
         return points.map((e) => ({
             ...{
                 /** esses dados são adicionados aos dados que vem da PRAIA escolhida pelas cooderdanadas. */
@@ -72,7 +77,7 @@ export class Forecast {
             },
             ...e,
         }));
-    };
+    }
 
     private mapForecastByTime(forecast: BeachForecast[]): TimeForecast[] {
         const forecastByeTime: TimeForecast[] = [];

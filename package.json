@@ -1,7 +1,7 @@
 {
   "name": "finding-waves",
   "version": "1.0.0",
-  "description": "api typescript para encontrar ondas em Itapoa-sc",
+  "description": "api typescript para encontrar ondas em Itapoa-terceira-pedra-sc",
   "main": "index.js",
   "scripts": {
     "build": "tsc -p .",
@@ -23,7 +23,7 @@
   "keywords": [
     "nodejs",
     "typescript",
-    "itapoa"
+    "Itapoa-terceira-pedra"
   ],
   "author": "Davi Ramon Gonçalves",
   "license": "ISC",

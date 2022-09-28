@@ -16,7 +16,7 @@ describe('Forecast Service', () => {
             {
                 lat: -26.067029,
                 lng: -48.608372,
-                name: 'Itapoa',
+                name: 'Itapoa-terceira-pedra',
                 position: BeachPosition.E,
                 user: 'some-id',
             },
@@ -28,7 +28,7 @@ describe('Forecast Service', () => {
                     {
                         lat: -26.067029,
                         lng: -48.608372,
-                        name: 'Itapoa',
+                        name: 'Itapoa-terceira-pedra',
                         position: 'E',
                         rating: 1,
                         swellDirection: 64.26,
@@ -49,7 +49,7 @@ describe('Forecast Service', () => {
                     {
                         lat: -26.067029,
                         lng: -48.608372,
-                        name: 'Itapoa',
+                        name: 'Itapoa-terceira-pedra',
                         position: 'E',
                         rating: 1,
                         swellDirection: 123.41,
@@ -70,7 +70,7 @@ describe('Forecast Service', () => {
                     {
                         lat: -26.067029,
                         lng: -48.608372,
-                        name: 'Itapoa',
+                        name: 'Itapoa-terceira-pedra',
                         position: 'E',
                         rating: 1,
                         swellDirection: 182.56,
@@ -103,15 +103,18 @@ describe('Forecast Service', () => {
             {
                 lat: -26.067029,
                 lng: -48.608372,
-                name: 'Itapoa',
+                name: 'Itapoa-terceira-pedra',
                 position: BeachPosition.E,
                 user: 'some-id',
             },
         ];
 
-        mockedStormGlassService.fetchPoints.mockRejectedValue('Error fetching data');  /** espera-se que a req seja rejeitada com um erro */
+        mockedStormGlassService.fetchPoints.mockRejectedValue(
+            'Error fetching data'
+        ); /** espera-se que a req seja rejeitada com um erro */
         const forecast = new Forecast(mockedStormGlassService);
-        await expect(forecast.processForecastForBeaches(beaches)).rejects.toThrow(Error)
-
-    })
+        await expect(
+            forecast.processForecastForBeaches(beaches)
+        ).rejects.toThrow(Error);
+    });
 });
