@@ -17,8 +17,8 @@ describe('Forecast Service', () => {
                 lat: -26.067029,
                 lng: -48.608372,
                 name: 'Itapoa-terceira-pedra',
-                position: BeachPosition.E,
-                user: 'some-id',
+                position: BeachPosition.E
+                
             },
         ];
         const expectedResponse = [
@@ -104,8 +104,7 @@ describe('Forecast Service', () => {
                 lat: -26.067029,
                 lng: -48.608372,
                 name: 'Itapoa-terceira-pedra',
-                position: BeachPosition.E,
-                user: 'some-id',
+                position: BeachPosition.E
             },
         ];
 

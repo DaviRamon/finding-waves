@@ -14,7 +14,6 @@ export interface Beach {
     position: BeachPosition;
     lat: number;
     lng: number;
-    user: string;
 }
 
 export interface TimeForecast {
