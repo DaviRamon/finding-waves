@@ -1,5 +1,6 @@
 import { Beach, BeachPosition } from "@src/models/beach";
-
+import nock from "nock";  /** mostra os paramentros da requisição que está sendo feita pra poder usar como teste*/
+import stormGlassWeather3HoursFixture from '../fixtures/stormGlass_weather_3_hours.json';
 describe('Beach forecast functional tests', () => {
     beforeEach(async () => {
         await Beach.deleteMany({});
@@ -12,7 +13,25 @@ describe('Beach forecast functional tests', () => {
         const beach = new Beach(defaultBeach);
         await beach.save();
     });
+
     it('should return a forecast with just a few times', async () => {
+        // nock.recorder.rec(); /** mostra os paramentros da requisição que está sendo feita  pra poder usar como teste*/
+        nock('https://api.stormglass.io:443', {
+            encodedQueryParams: true,
+            reqheaders: {
+                Authorization: (): boolean => true,
+            },
+        })
+            .defaultReplyHeaders({ 'access-control-allow-origin': '*' })
+            .get('/v2/weather/point')
+            .query({
+                lat: '-26.067029',
+                lng: '-48.608372',
+                params: /(.*)/,
+                source: 'noaa',
+            })
+            .reply(200, stormGlassWeather3HoursFixture);
+
         const { body, status } = await global.testRequest.get('/forecast');
         expect(status).toBe(200);
         expect(body).toEqual([
@@ -21,10 +40,10 @@ describe('Beach forecast functional tests', () => {
                 forecast: [
                     {
                         lat: -26.067029,
-                        lng: 48.608372,
+                        lng: -48.608372,
                         name: 'Itapoa-terceira-pedra',
                         position: 'E',
-                        rating: 2,
+                        rating: 1,
                         swellDirection: 64.26,
                         swellHeight: 0.15,
                         swellPeriod: 3.89,
@@ -32,6 +51,7 @@ describe('Beach forecast functional tests', () => {
                         waveDirection: 231.38,
                         waveHeight: 0.47,
                         windDirection: 299.45,
+                        windSpeed:100
                     },
                 ],
             },
@@ -40,10 +60,10 @@ describe('Beach forecast functional tests', () => {
                 forecast: [
                     {
                         lat: -26.067029,
-                        lng: 48.608372,
+                        lng: -48.608372,
                         name: 'Itapoa-terceira-pedra',
                         position: 'E',
-                        rating: 2,
+                        rating: 1,
                         swellDirection: 123.41,
                         swellHeight: 0.21,
                         swellPeriod: 3.67,
@@ -51,9 +71,31 @@ describe('Beach forecast functional tests', () => {
                         waveDirection: 232.12,
                         waveHeight: 0.46,
                         windDirection: 310.48,
+                        windSpeed:100
                     },
                 ],
             },
+
+            {
+                time: '2020-04-26T02:00:00+00:00',
+                forecast: [
+                    {
+                        lat: -26.067029,
+                        lng: -48.608372,
+                        name: 'Itapoa-terceira-pedra',
+                        position: 'E',
+                        rating: 1,
+                        swellDirection: 182.56,
+                        swellHeight: 0.28,
+                        swellPeriod: 3.44,
+                        time: '2020-04-26T02:00:00+00:00',
+                        waveDirection: 232.86,
+                        waveHeight: 0.46,
+                        windDirection: 321.5,
+                        windSpeed: 100,
+                    },
+                ],
+            },  
         ]);
     });
 });
